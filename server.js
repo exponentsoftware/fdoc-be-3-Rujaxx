@@ -1,5 +1,6 @@
 const express = require('express')
 const dotenv = require('dotenv')
+const errorHandler = require('./middlewares/error');
 
 //Load env vars
 dotenv.config({ path : './config/config.env'})
@@ -10,6 +11,7 @@ connectDB()
 
 //route files
 const tasks = require('./routes/task')
+const users = require('./routes/user')
 
 const app = express();
 
@@ -18,12 +20,10 @@ app.use(express.json())
 
 // Mount routers
 app.use('/api/v1/tasks', tasks);
+app.use('/api/v1/users', users);
 
 // error handler
-app.use(function (err, req, res, next) {
-    console.error(err.stack)
-    res.status(500).send('Resource not found!')
-  })
+app.use(errorHandler)
 
 const PORT = process.env.PORT || 8000
 

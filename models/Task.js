@@ -1,11 +1,11 @@
 const mongoose = require('mongoose')
 
 const TaskSchema = new mongoose.Schema({
-    username: {
-        type : String,
-        required : [true,'Please add a username'],
-        trim : true
-    },
+    user :{
+        type : mongoose.Schema.ObjectId ,
+        ref : "User",
+        required : true
+      },
     title: {
         type : String,
         required : [true,'Please add a title'],
@@ -27,7 +27,7 @@ const TaskSchema = new mongoose.Schema({
     updatedAt: {
         type: Date,
         default: new Date()
-    }
+    },
 },{timestamps : true })
 
 

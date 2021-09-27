@@ -1,5 +1,6 @@
 const Task = require('../models/Task')
 const asyncHandler = require('../middlewares/async')
+const User = require('../models/User')
 
 
 // @desc      Get all tasks
@@ -9,7 +10,8 @@ exports.getTasks = asyncHandler(async(req,res,next) => {
   let query 
 
   query = Task.find(req.query)
-  
+
+ 
   //Sorting
   if(req.query.sort){
     const sortBy = req.query.sort.split(",").join(" ")
@@ -32,12 +34,11 @@ exports.getTasks = asyncHandler(async(req,res,next) => {
 exports.getTask = asyncHandler(async(req,res,next) => {
     const task = await Task.findById(req.params.id);
 
-    if(!task){
-        res.status(400).json({
-            success : false,
-            message : "task not found"
-        })
-    }
+    if (!task) {
+        return next(
+          new ErrorResponse(`task not found with id of ${req.params.id}`, 404)
+        );
+      }
 
     res.status(200).json({
         success : true,
@@ -66,12 +67,11 @@ exports.updateTask = asyncHandler(async(req,res,next) => {
         validators : true
     });
 
-    if(!task){
-        res.status(400).json({
-            success : false,
-            message : "task not found"
-        })
-    }
+    if (!task) {
+        return next(
+          new ErrorResponse(`task not found with id of ${req.params.id}`, 404)
+        );
+      }
 
     res.status(200).json({
         success : true,
@@ -86,12 +86,11 @@ exports.updateTask = asyncHandler(async(req,res,next) => {
 exports.deleteTask = asyncHandler(async(req,res,next) => {
     const task = await Task.findByIdAndDelete(req.params.id);
 
-    if(!task){
-        res.status(400).json({
-            success : false,
-            message : "task not found"
-        })
-    }
+    if (!task) {
+        return next(
+          new ErrorResponse(`task not found with id of ${req.params.id}`, 404)
+        );
+      }
 
     res.status(200).json({
         success:true,
