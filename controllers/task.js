@@ -7,20 +7,13 @@ const User = require('../models/User')
 // @route     GET /api/v1/tasks
 // @access    Public
 exports.getTasks = asyncHandler(async(req,res,next) => {
-  let query 
-
-  query = Task.find(req.query)
-
- 
-  //Sorting
-  if(req.query.sort){
-    const sortBy = req.query.sort.split(",").join(" ")
-    query = query.sort(sortBy);
-  }else{
-    query = query.sort("-createdAt")
+  let id = req.body.user
+  console.log(id)
+  let tasks = await Task.find();
+  if(id){
+    tasks = await Task.find({user :id})
   }
 
-  const tasks = await query;
     res.status(200).json({
         success : true,
         count : tasks.length,
@@ -33,7 +26,6 @@ exports.getTasks = asyncHandler(async(req,res,next) => {
 // @access    Public
 exports.getTask = asyncHandler(async(req,res,next) => {
     const task = await Task.findById(req.params.id);
-
     if (!task) {
         return next(
           new ErrorResponse(`task not found with id of ${req.params.id}`, 404)
@@ -96,4 +88,23 @@ exports.deleteTask = asyncHandler(async(req,res,next) => {
         success:true,
         message: "deleted succesfully"
       })
+})
+
+
+// @desc      Get a task
+// @route     GET /api/v1/tasks/:id
+// @access    Public
+exports.getTaskByUser = asyncHandler(async(req,res,next) => {
+    const task = await Task.findById(req.params.id);
+
+    if (!task) {
+        return next(
+          new ErrorResponse(`task not found with id of ${req.params.id}`, 404)
+        );
+      }
+
+    res.status(200).json({
+        success : true,
+        data : task
+    })
 })

@@ -1,4 +1,5 @@
 const express = require('express')
+const {authorize} = require('../middlewares/auth')
 
 const {
     addTask,
@@ -18,7 +19,7 @@ router
 
 router
     .route('/:id')
-    .get(getTask)
+    .get(authorize('admin'),getTask)
     .put(updateTask)
     .delete(deleteTask)
 
