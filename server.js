@@ -17,18 +17,10 @@ const app = express();
 
 //body parser
 app.use(express.json())
-// app.use(setUser)
+
 // Mount routers
 app.use('/api/v1/tasks', tasks);
 app.use('/api/v1/users', users);
-
-// function setUser(req, res, next) {
-//     const userId = req.body.userId
-//     if (userId) {
-//       req.user = users.find(user => user.id === userId)
-//     }
-//     next()
-//   }
 
 // error handler
 app.use(errorHandler)
